@@ -1,0 +1,166 @@
+<div class="container">
+  <div class="floating-container transferencia-form">
+    <h2>Realizar Transferência</h2>
+    <input type="number" class="form-control" [(ngModel)]="contaOrigem" placeholder="Conta de Origem">
+    <input type="number" class="form-control" [(ngModel)]="contaDestino" placeholder="Conta de Destino">
+    <input type="number" class="form-control" [(ngModel)]="valor" placeholder="Valor da Transferência">
+    <button type="button" class="btn btn-primary" (click)="realizarTransferencia()">Transferir</button>
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalAgendamento">Agendar Transferência</button>
+  </div>
+
+  <div id="alert-placeholder" class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1050;">
+    <div *ngIf="erroContaOrigem" class="alert alert-danger alert-dismissible fade show" role="alert">
+      A conta de origem deve ter 10 dígitos.
+      <button type="button" class="btn-close" (click)="fecharAlerta('erroContaOrigem')" aria-label="Close"></button>
+    </div>
+    <div *ngIf="erroContaDestino" class="alert alert-danger alert-dismissible fade show" role="alert">
+      A conta de destino deve ter 10 dígitos.
+      <button type="button" class="btn-close" (click)="fecharAlerta('erroContaDestino')" aria-label="Close"></button>
+    </div>
+    <div *ngIf="erroValor" class="alert alert-danger alert-dismissible fade show" role="alert">
+      O valor da transferência deve ser válido e maior que zero.
+      <button type="button" class="btn-close" (click)="fecharAlerta('erroValor')" aria-label="Close"></button>
+    </div>
+    <div *ngIf="erroDataAgendamento" class="alert alert-danger alert-dismissible fade show" role="alert">
+      A data de agendamento deve estar dentro do intervalo permitido de 0 a 50 dias.
+      <button type="button" class="btn-close" (click)="fecharAlerta('erroDataAgendamento')" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div *ngIf="alerta" class="alert alert-{{ alerta.tipo }} alert-dismissible fade show text-center position-fixed top-0 start-50 translate-middle-x mt-3" role="alert" style="z-index: 1050;">
+    {{ alerta.mensagem }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div class="floating-container historico">
+    <h2>Histórico de Transferências</h2>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Conta Origem</th>
+            <th scope="col">Conta Destino</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Taxa</th>
+            <th scope="col">Taxa Extra</th>
+            <th scope="col">Valor Final</th>
+            <th scope="col">Data Transferência</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="!historicoTransferencias || historicoTransferencias.length === 0">
+            <td colspan="7" class="text-center">Não há transferências</td>
+          </tr>
+          <tr *ngFor="let transferencia of historicoTransferencias">
+            <td>{{ transferencia.contaOrigem }}</td>
+            <td>{{ transferencia.contaDestino }}</td>
+            <td>{{ transferencia.valor | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ transferencia.taxa | number:'1.1-1' }}%</td> <!-- Ajustando para exibir porcentagem no padrão 0,0% -->
+            <td>{{ transferencia.taxaExtra | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ transferencia.valorFinal | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ transferencia.dataTransferencia | date:'dd/MM/yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="floating-container taxas">
+    <h2>Tabela de Taxas de Transferência</h2>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Dias Transferência</th>
+            <th scope="col">R$</th>
+            <th scope="col">Taxa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0 - 0</td>
+            <td>3,00</td>
+            <td>2,5%</td>
+          </tr>
+          <tr>
+            <td>1 - 10</td>
+            <td>12,00</td>
+            <td>0,0%</td>
+          </tr>
+          <tr>
+            <td>11 - 20</td>
+            <td>0,00</td>
+            <td>8,2%</td>
+          </tr>
+          <tr>
+            <td>21 - 30</td>
+            <td>0,00</td>
+            <td>6,9%</td>
+          </tr>
+          <tr>
+            <td>31 - 40</td>
+            <td>0,00</td>
+            <td>4,7%</td>
+          </tr>
+          <tr>
+            <td>41 - 50</td>
+            <td>0,00</td>
+            <td>1,7%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="floating-container historico-agendadas">
+    <h2>Histórico de Transferências Agendadas</h2>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Conta Origem</th>
+            <th scope="col">Conta Destino</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Taxa</th>
+            <th scope="col">Taxa Extra</th>
+            <th scope="col">Valor Final</th>
+            <th scope="col">Data Agendamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="!historicoTransferenciasAgendadas || historicoTransferenciasAgendadas.length === 0">
+            <td colspan="7" class="text-center">Não há transferências</td>
+          </tr>
+          <tr *ngFor="let transferencia of historicoTransferenciasAgendadas">
+            <td>{{ transferencia.contaOrigem }}</td>
+            <td>{{ transferencia.contaDestino }}</td>
+            <td>{{ transferencia.valor | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ transferencia.taxa | number:'1.1-1' }}%</td> <!-- Ajustando para exibir porcentagem no padrão 0,0% -->
+            <td>{{ transferencia.taxaExtra | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ transferencia.valorFinal | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ transferencia.dataTransferencia | date:'dd/MM/yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal de Agendamento -->
+  <div class="modal" tabindex="-1" id="modalAgendamento">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agendar Transferência</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="date" class="form-control" [(ngModel)]="dataAgendamento" (input)="validarData()" placeholder="Selecione uma data">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" [disabled]="!dataValida" (click)="confirmarAgendamento()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

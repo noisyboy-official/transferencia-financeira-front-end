@@ -1,0 +1,118 @@
+.container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os cards fiquem lado a lado */
+  justify-content: space-between; /* Espaço entre os cards */
+  gap: 20px; /* Espaçamento entre os cards */
+  margin-top: 20px;
+}
+
+.floating-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(50% - 20px); /* Cada card ocupa 50% da largura com espaçamento */
+  max-width: 600px; /* Limita a largura máxima de cada card */
+}
+
+.floating-container.historico {
+  width: 90%; /* Card de histórico ocupa quase toda a largura */
+  max-width: 1200px; /* Limita a largura máxima */
+  height: 400px; /* Altura fixa para o card */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Garante que o conteúdo não vaze do card */
+}
+
+.floating-container.historico-agendadas {
+  width: 90%; /* Card de histórico ocupa quase toda a largura */
+  max-width: 1200px; /* Limita a largura máxima */
+  height: 400px; /* Altura fixa para o card */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Garante que o conteúdo não vaze do card */
+}
+
+.transferencia-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.transferencias-table {
+  display: table; /* Garante que a tabela se comporte como uma tabela */
+  width: 100%; /* Garante que a tabela ocupe toda a largura do card */
+  margin-top: 10px;
+  display: block; /* Garante que o scroll funcione corretamente */
+  height: 100%; /* Garante que a tabela ocupe toda a altura do card */
+  table-layout: fixed; /* Garante que as colunas tenham tamanhos proporcionais */
+  border-collapse: collapse; /* Remove espaços entre bordas */
+}
+
+.transferencias-table thead {
+  display: table-header-group; /* Garante que o cabeçalho permaneça fixo */
+  width: 100%; /* Garante que o cabeçalho ocupe toda a largura */
+  flex-shrink: 0; /* Impede que o cabeçalho seja redimensionado */
+}
+
+.transferencias-table tbody {
+  display: block; /* Permite o scroll no corpo da tabela */
+  max-height: 300px; /* Define altura máxima para o corpo */
+  overflow-y: auto; /* Adiciona rolagem vertical */
+  flex-grow: 1; /* Faz o corpo da tabela ocupar o espaço restante */
+  display: block; /* Garante que o scroll funcione no corpo */
+  overflow-y: auto; /* Adiciona rolagem ao corpo da tabela */
+}
+
+.transferencias-table th,
+.transferencias-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  word-wrap: break-word; /* Garante que o texto não ultrapasse os limites */
+  height: 50px; /* Define uma altura fixa para as células */
+  vertical-align: middle; /* Centraliza o conteúdo verticalmente */
+}
+
+.transferencias-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  font-size: 18px; /* Aumenta o tamanho do título da tabela */
+}
+
+.transferencias-table td {
+  font-size: 18px; /* Aumenta o tamanho dos valores para acompanhar o título */
+}
+
+.transferencias-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.floating-container h2 {
+  position: sticky; /* Mantém o título fixo */
+  top: 0; /* Fixa no topo do container */
+  background-color: #fff; /* Define um fundo branco para o título */
+  z-index: 1; /* Garante que o título fique acima da lista */
+  margin: 0; /* Remove margens extras */
+  padding: 10px; /* Adiciona espaçamento interno */
+  border-bottom: 1px solid #ddd; /* Adiciona uma borda para separar o título da lista */
+  text-align: left; /* Alinha o texto à esquerda */
+}
+
+.form-control {
+  padding: 10px;
+  font-size: 14px;
+}
+
+.btn {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.floating-container ul {
+  list-style-type: none;
+  padding: 0;
+  overflow-y: auto; /* Adiciona rolagem vertical se necessário */
+  max-height: 200px; /* Limita a altura da lista */
+}
